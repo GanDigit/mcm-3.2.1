@@ -1,0 +1,55 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: tiny-channel-deployable-deployment
+  namespace: tiny-channel-ns
+  annotations:
+    app.ibm.com/is-local-deployable: "true"
+  labels:
+    app: tiny-channel-app
+spec:
+  template:
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: tiny-channel
+    spec:
+      selector:
+        matchLabels:
+          app: tiny-channel-app
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: tiny-channel-app
+        spec:
+          containers:
+            - name: frontend
+              image: bitnami/nginx
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 80
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: tiny-channel-deployable-service
+  namespace: tiny-channel-ns
+  annotations:
+    app.ibm.com/is-local-deployable: "true"
+  labels:
+    app: tiny-channel-app
+spec:
+  template:
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: tiny-channel
+      labels:
+        app: tiny-channel-app
+    spec:
+      type: NodePort
+      ports:
+        - port: 80
+      selector:
+        app: tiny-channel-app

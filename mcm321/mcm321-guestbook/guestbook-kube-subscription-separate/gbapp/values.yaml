@@ -1,0 +1,19 @@
+appInClusterNamespace: gbapp
+
+clusterReplicas: 1
+
+placement:
+  multicluster:
+    enabled: true
+    main:
+      labelSelector:
+        matchLabels:
+          name: local-cluster
+    redismaster:
+      labelSelector:
+        matchLabels:
+          name: local-cluster
+
+channel:
+  name: gbchn
+  namespace: gbchn

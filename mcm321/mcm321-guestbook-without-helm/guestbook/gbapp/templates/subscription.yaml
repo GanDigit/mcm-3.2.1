@@ -1,0 +1,57 @@
+---
+# Source: gbapp/templates/subscription.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Subscription
+metadata:
+  name: gbapp-gbapp
+  namespace: gbapp
+  labels:
+    app: gbapp
+    chart: gbapp-0.1.0
+    release: gbapp
+    heritage: Tiller
+spec:
+  channel: gbchn/gbchn
+  packageFilter:
+    labelSelector:
+      matchLabels:
+        package: guestbook
+        component: main
+  placement:
+    placementRef:
+      name: gbapp-gbapp
+      kind: PlacementRule
+      group: app.ibm.com
+  overrides:
+  - clusterName: "/"
+    clusterOverrides:
+    - path: "metadata.namespace"
+      value: gbapp
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Subscription
+metadata:
+  name: gbapp-gbapp-redismaster
+  namespace: gbapp
+  labels:
+    app: gbapp
+    chart: gbapp-0.1.0
+    release: gbapp
+    heritage: Tiller
+spec:
+  channel: gbchn/gbchn
+  packageFilter:
+    labelSelector:
+      matchLabels:
+        package: guestbook
+        component: redismaster
+  placement:
+    placementRef:
+      name: gbapp-gbapp-redismaster
+      kind: PlacementRule
+      group: app.ibm.com
+  overrides:
+  - clusterName: "/"
+    clusterOverrides:
+    - path: "metadata.namespace"
+      value: gbapp

@@ -1,0 +1,12 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: PlacementRule
+metadata:
+  name: tiny-app
+  namespace: tiny-app-ns
+  labels:
+    app: tiny-app
+spec:
+  clusterReplicas: 1
+  clusterLabels:
+    matchLabels:
+      name: local-cluster

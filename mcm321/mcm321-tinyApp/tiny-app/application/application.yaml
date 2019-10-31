@@ -1,0 +1,17 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: tiny-app
+  namespace: tiny-app-ns
+  labels:
+    app: tiny-app
+spec:
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - tiny-app
+  componentKinds:
+  - group: app.ibm.com
+    kind: Subscription

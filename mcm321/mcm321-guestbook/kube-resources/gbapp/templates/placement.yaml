@@ -1,0 +1,33 @@
+---
+# Source: gbapp/templates/placement.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: PlacementRule
+metadata:
+  name: gbapp-gbapp
+  namespace: gbapp
+  labels:
+    app: gbapp
+    chart: gbapp-0.1.0
+    release: gbapp
+    heritage: Tiller
+spec:
+  clusterReplicas: 1
+  clusterLabels:
+    matchLabels:
+      name: ocp-cluster
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: PlacementRule
+metadata:
+  name: gbapp-gbapp-redismaster
+  namespace: gbapp
+  labels:
+    app: gbapp
+    chart: gbapp-0.1.0
+    release: gbapp
+    heritage: Tiller
+spec:
+  clusterReplicas: 1
+  clusterLabels:
+    matchLabels:
+      name: ocp-cluster

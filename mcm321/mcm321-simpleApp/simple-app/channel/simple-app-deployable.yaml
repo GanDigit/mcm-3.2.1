@@ -1,0 +1,55 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: simple-app
+  namespace: sachannel
+  annotations:
+    app.ibm.com/is-local-deployable: "true"
+  labels:
+    app: simple-app
+spec:
+  template:
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: simple-app
+    spec:
+      selector:
+        matchLabels:
+          app: simple-app
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: simple-app
+        spec:
+          containers:
+            - name: frontend
+              image: bitnami/nginx
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 80
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: simple-app
+  namespace: sachannel
+  annotations:
+    app.ibm.com/is-local-deployable: "true"
+  labels:
+    app: simple-app
+spec:
+  template:
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: simple-app
+      labels:
+        app: simple-app
+    spec:
+      type: NodePort
+      ports:
+        - port: 80
+      selector:
+        app: simple-app

@@ -1,0 +1,15 @@
+---
+# Source: gbchn/templates/channel.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: gbchn
+  namespace: gbchn
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+spec:
+  type: Namespace
+  pathname: gbchn

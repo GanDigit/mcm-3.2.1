@@ -1,0 +1,19 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Subscription
+metadata:
+  name: tiny-app
+  namespace: tiny-app-ns
+  labels:
+    app: tiny-app
+spec:
+  channel: tiny-channel-ns/tiny-channel-app
+  placement:
+    placementRef:
+      name: tiny-app
+      kind: PlacementRule
+      group: app.ibm.com
+  overrides:
+  - clusterName: "/"
+    clusterOverrides:
+    - path: "metadata.namespace"
+      value: tiny-app-ns

@@ -1,0 +1,76 @@
+---
+# Source: gbchn/templates/masterdeployables.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-redismaster
+  namespace: gbchn
+  annotations:
+    app.ibm.com/is-local-deployable: "true"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+    component: redismaster
+    package: guestbook
+spec:
+  template:
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: gbchn-gbchn-redismaster
+    spec:
+      selector:
+        matchLabels:
+          app: gbchn
+          release: gbchn
+          role: master
+          tier: backend
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: gbchn
+            release: gbchn
+            role: master
+            tier: backend
+        spec:
+          containers:
+            - name: redis
+              image: "gcr.io/kubernetes-e2e-test-images/redis:1.0"
+              imagePullPolicy: IfNotPresent
+              ports:
+                - containerPort: 6379
+              securityContext:
+                runAsUser: 0
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-redismasterservice
+  namespace: gbchn
+  annotations:
+    app.ibm.com/is-local-deployable: "true"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+    component: redismaster
+    package: guestbook
+spec:
+  template:
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: redis-master
+    spec:
+      type: ClusterIP
+      ports:
+        - port: 6379
+      selector:
+        app: gbchn
+        release: gbchn
+        role: master
+        tier: backend

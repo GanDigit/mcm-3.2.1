@@ -1,0 +1,81 @@
+---
+# Source: gbchn/templates/frontenddeployables.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-frontend
+  namespace: gbchn
+  annotations:
+    app.ibm.com/is-local-deployable: "true"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+    component: main
+    package: guestbook
+spec:
+  template:
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: gbchn-gbchn-frontend
+    spec:
+      selector:
+        matchLabels:
+          app: gbchn
+          release: gbchn
+          tier: frontend
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: gbchn
+            release: gbchn
+            tier: frontend
+        spec:
+          containers:
+            - name: frontend
+              image: "gcr.io/google-samples/gb-frontend:v6"
+              imagePullPolicy: IfNotPresent
+              ports:
+                - containerPort: 80
+              securityContext:
+                runAsUser: 0
+              env:
+              - name: GET_HOSTS_FROM
+                value: dns
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-service
+  namespace: gbchn
+  annotations:
+    app.ibm.com/is-local-deployable: "true"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+    component: main
+    package: guestbook
+spec:
+  template:
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: gbchn-gbchn
+      labels:
+        app: gbchn
+        chart: gbchn-0.1.0
+        release: gbchn
+        heritage: Tiller
+    spec:
+      type: NodePort
+      ports:
+        - port: 80
+      selector:
+        app: gbchn
+        release: gbchn
+        tier: frontend
